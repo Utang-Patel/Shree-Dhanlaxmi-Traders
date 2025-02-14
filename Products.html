@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore high-quality Neem, Mango, and Babool wood products. Available in various cut sizes for furniture, construction, and more.">
+    <meta name="keywords" content="wood products, neem wood, mango wood, babool wood, timber supplier, cut size wood">
+    <meta name="author" content="Shree Dhanlaxmi Traders">
+    <meta name="robots" content="index, follow">
+    <title>Our Wood Products - Shree Dhanlaxmi Traders</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #f8f9fa;
+        }
+
+        /* Navigation Bar */
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #343a40;
+            color: rgb(14, 0, 0);
+            height: 20vh;
+            margin-bottom: 100px;
+            position: relative;
+        }
+
+        .company-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .navbar {
+            min-height: 50px;
+            /* Set a minimum height of 150px */
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: rgb(8, 0, 0);
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffc107;
+        }
+
+        /* Global Styles */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        /* Product Grid Styles */
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 20px;
+        }
+
+        .product {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .product h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .product p {
+            margin-bottom: 20px;
+        }
+
+        .product a {
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .product a:hover {
+            background-color: #3e8e41;
+        }
+
+        /* Responsive Design */
+
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+
+        /* Footer */
+        footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px;
+            background-color: #343a40;
+            color: white;
+            height: 40vh;
+            margin-top: 100px;
+        }
+
+        .footer-left,
+        .footer-right {
+            flex: 1;
+        }
+
+        .footer-left a {
+            text-decoration: none;
+            color: white;
+            display: block;
+            margin-top: 5px;
+            transition: color 0.3s;
+        }
+
+        .footer-left a:hover {
+            color: #ffc107;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-container {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px;
+                position: relative;
+
+            }
+
+            .menu-toggle {
+                display: block;
+                position: absolute;
+                right: 20px;
+                top: 20px;
+                background: none;
+                border: none;
+                color: rgb(110, 1, 1);
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                right: 20px;
+                background: #343a40;
+                border-radius: 5px;
+                padding: 10px;
+                width: 150px;
+            }
+
+            .nav-links a {
+                display: block;
+                margin: 10px 0;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            footer {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <header class="navbar navbar-expand-lg" style="background-color: rgb(231, 117, 10);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Shree Dhanlaxmi Traders</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Products.html">Products</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Services.html">Services</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <h1> Our Products: </h1>
+        <h3>Neem wood, Mango wood, Jungli Wood, Babool Wood </h3>
+
+        <div class="container">
+            <div class="product-grid">
+                <div class="product">
+                    <img src="image/neem.jpg" alt="Image 1">
+                    <h3>Neem</h3>
+
+                    <a href="form1.html" class="btn">Get Best Price</a>
+                </div>
+                <div class="product">
+                    <img src="image/neem2.jpg" alt="Image 2">
+                    <h3>Neem</h3>
+
+                    <a href="form2.html" class="btn">Get Best Price</a>
+                </div>
+                <div class="product">
+                    <img src="image/neem6.jpg" alt="Image 3">
+                    <h3>Neem</h3>
+
+                    <a href="form3.html" class="btn">Get Best Price</a>
+                </div>
+                <div class="product">
+                    <img src="image/neem7.jpg" alt="Image 4">
+                    <h3>Neem</h3>
+
+                    <a href="form4.html" class="btn">Get Best Price</a>
+                </div>
+                <div class="product">
+                    <img src="image/neem8.jpg" alt="Image 5">
+                    <h3>Neem</h3>
+
+                    <a href="form5.html" class="btn">Get Best Price</a>
+                </div>
+                <div class="product">
+                    <img src="image/neem12.jpg" alt="Image 6">
+                    <h3>Neem</h3>
+
+                    <a href="form6.html" class="btn">Get Best Price</a>
+                </div>
+                <div class="product">
+                    <img src="image/neem13.jpg" alt="Image 7">
+                    <h3>Neem</h3>
+
+                    <a href="form7.html" class="btn">Get Best Price</a>
+                </div>
+                <div class="product">
+                    <img src="image/mango.jpg" alt="Image 8">
+                    <h3>Mango</h3>
+
+                    <a href="form8.html" class="btn">Get Best Price</a>
+                </div>
+                <div class="product">
+                    <img src="image/mango2.jpg" alt="Image 9">
+                    <h3>Mango</h3>
+
+                    <a href="form9.html" class="btn">Get Best Price</a>
+                </div>
+                <div class="product">
+                    <img src="image/mango3.jpg" alt="Image 10">
+                    <h3>Mango</h3>
+
+                    <a href="form10.html" class="btn">Get Best Price</a>
+                </div>
+                <div class="product">
+                    <img src="image/mango4.jpg" alt="Image 11">
+                    <h3>Mango</h3>
+
+                    <a href="form11.html" class="btn">Get Best Price</a>
+                </div>
+                <div class="product">
+                    <img src="image/siris.jpg" alt="Image 12">
+                    <h3>Siris</h3>
+
+                    <a href="form12.html" class="btn">Get Best Price</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+            <p>&copy; 2024 Shree Dhanlaxmi Traders</p>
+            <p><a href="index.html" class="text-light">Home</a> | <a href="Products.html"
+                    class="text-light">Products</a> | <a href="Services.html" class="text-light">Services</a> | <a
+                    href="Contact.html" class="text-light">Contact Us</a></p>
+            <p>Location: <a
+                    href="https://www.google.com/maps/dir/23.0829603,72.6505954/shree+dhanlaxmi+traders+,neem+wood+cut+size,mango+wood+cut+size,babool+wood+cut+size+prantij+photos/@23.2566191,72.6335816,11z/data=!3m1!4b1!4m9!4m8!1m1!4e1!1m5!1m1!1s0x395dcfbd20b1adc7:0x8c9fd05d60b9bbf3!2m2!1d72.8592588!2d23.4327219?entry=ttu&g_ep=EgoyMDI1MDEyOS4xIKXMDSoASAFQAw%3D%3D"
+                    target="_blank"> 827/1, Railway Station Road, Prantij, Sabarkantha, Prantij-383205, Gujarat,
+                    India</a></p>
+            <p>Owner: Sachin Patel </p>
+            <p>Phone: 9998472883</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- /* JavaScript for toggling navigation menu */ -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const menuToggle = document.querySelector(".menu-toggle");
+            const navLinks = document.querySelector(".nav-links");
+
+            menuToggle.addEventListener("click", function () {
+                navLinks.classList.toggle("show");
+            });
+        });
+        // Back-to-Top Button
+        let backToTopButton = document.createElement("button");
+        backToTopButton.innerHTML = "&#8679;";
+        backToTopButton.classList.add("back-to-top");
+        document.body.appendChild(backToTopButton);
+
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 300) {
+                backToTopButton.classList.add("show");
+            } else {
+                backToTopButton.classList.remove("show");
+            }
+        });
+
+        backToTopButton.addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+
+        // CSS for Back-to-Top Button (You can move this to your CSS file)
+        const style = document.createElement("style");
+        style.innerHTML = `
+    .back-to-top {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 24px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .back-to-top.show {
+        display: flex;
+    }
+    .back-to-top:hover {
+        background-color: #0056b3;
+    }
+`;
+        document.head.appendChild(style);
+    </script>
+
+</body>
+
+</html>
