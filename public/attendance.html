@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .filter-section {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            width: 30%;
+        }
+        .filter-group label {
+            margin-bottom: 5px;
+        }
+        .filter-group input, .filter-group select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        .view-btn {
+            background-color: #00bcd4;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .save-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .attendance-radio {
+            margin: 5px;
+        }
+        .status-message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+            border: 1px solid #d6e9c6;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+            border: 1px solid #ebccd1;
+        }
+        .month-table td {
+            text-align: center;
+            padding: 8px;
+            font-size: 14px;
+        }
+        .month-table th {
+            padding: 8px;
+            font-size: 14px;
+        }
+        .present {
+            background-color: #dff0d8;
+        }
+        .absent {
+            background-color: #f2dede;
+        }
+        .month-view {
+            display: none;
+            overflow-x: auto;
+        }
+        .day-view {
+            display: block;
+        }
+        .total-column {
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            width: 100%;
+        }
+        .attendance-select {
+            width: 100%;
+            max-width: 180px;
+        }
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 24px;
+        }
+        .page-title {
+            margin: 0;
+            text-align: center;
+            font-size: 2rem;
+        }
+        .back-btn {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            font-size: 1.1rem;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        @media (max-width: 992px) {
+            .filter-section {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .filter-group {
+                width: 100%;
+                max-width: 100%;
+            }
+            .action-buttons {
+                width: 100%;
+                flex-direction: column;
+            }
+            .view-btn,
+            .save-btn {
+                width: 100%;
+            }
+            .attendance-select {
+                max-width: none;
+            }
+        }
+        @media (max-width: 576px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+            th, td {
+                padding: 10px 8px;
+            }
+            .filter-group input,
+            .filter-group select {
+                font-size: 14px;
+            }
+            .view-btn,
+            .save-btn {
+                padding: 12px;
+                font-size: 14px;
+            }
+            .back-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <button class="view-btn back-btn" onclick="goBack()" aria-label="Back">←</button>
+            <h1 class="page-title">Attendance Management</h1>
+        </div>
+        
+        <div class="filter-section">
+            <div class="filter-group">
+                <label for="date">Select Date:</label>
+                <input type="date" id="date" name="date">
+            </div>
+            <div class="filter-group">
+                <label for="month">Select Month:</label>
+                <input type="month" id="month" name="month">
+            </div>
+            <div class="action-buttons">
+                <button class="view-btn" onclick="viewDailyAttendance()">View Date Attendance</button>
+                <button class="view-btn" onclick="viewMonthlyAttendance()">View Month Attendance</button>
+            </div>
+        </div>
+        
+        <!-- Daily Attendance View -->
+        <div id="dayView" class="day-view">
+            <table id="attendanceTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Attendance</th>
+                    </tr>
+                </thead>
+                <tbody id="attendanceBody">
+                    <!-- Employee data will be populated here -->
+                </tbody>
+            </table>
+            
+            <button class="save-btn" onclick="saveAttendance()">Save Attendance</button>
+        </div>
+        
+        <!-- Monthly Attendance View -->
+        <div id="monthView" class="month-view">
+            <table id="monthlyAttendanceTable" class="month-table">
+                <!-- Monthly attendance data will be populated here -->
+            </table>
+        </div>
+        
+        <div id="statusMessage" class="status-message"></div>
+    </div>
+
+    <script>
+        // Get today's date in YYYY-MM-DD format
+        function getTodayDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        
+        // Get current month in YYYY-MM format
+        function getCurrentMonth() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            return `${year}-${month}`;
+        }
+        
+        // Initialize the page
+        window.onload = function() {
+            const today = getTodayDate();
+            const currentMonth = getCurrentMonth();
+            
+            document.getElementById('date').value = today;
+            document.getElementById('month').value = currentMonth;
+            
+            document.getElementById('date').addEventListener('change', viewDailyAttendance);
+            document.getElementById('month').addEventListener('change', viewMonthlyAttendance);
+            
+            showDayView();
+            viewDailyAttendance();
+        };
+        
+        // Show status message
+        function showStatusMessage(message, isSuccess) {
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = message;
+            statusElement.style.display = 'block';
+            
+            if (isSuccess) {
+                statusElement.className = 'status-message success';
+            } else {
+                statusElement.className = 'status-message error';
+            }
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                statusElement.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Switch between day and month views
+        function showDayView() {
+            document.getElementById('dayView').style.display = 'block';
+            document.getElementById('monthView').style.display = 'none';
+        }
+        
+        function showMonthView() {
+            document.getElementById('dayView').style.display = 'none';
+            document.getElementById('monthView').style.display = 'block';
+        }
+        
+        // View daily attendance
+        function viewDailyAttendance() {
+            let selectedDate = document.getElementById('date').value;
+            if (!selectedDate) {
+                selectedDate = getTodayDate();
+                document.getElementById('date').value = selectedDate;
+            }
+            showDayView();
+            loadAttendanceTable(selectedDate);
+        }
+        
+        // View monthly attendance
+        function viewMonthlyAttendance() {
+            let selectedMonth = document.getElementById('month').value;
+            if (!selectedMonth) {
+                selectedMonth = getCurrentMonth();
+                document.getElementById('month').value = selectedMonth;
+            }
+            showMonthView();
+            loadMonthlyAttendance(selectedMonth);
+        }
+        
+        function normalizeAttendanceDate(recordDate) {
+            if (recordDate instanceof Date) {
+                return recordDate.toLocaleDateString('en-CA');
+            }
+            if (typeof recordDate === 'string') {
+                const parsed = new Date(recordDate);
+                if (!Number.isNaN(parsed.getTime())) {
+                    return parsed.toLocaleDateString('en-CA');
+                }
+                return recordDate.split('T')[0];
+            }
+            return String(recordDate).split('T')[0];
+        }
+
+        const apiBase = '';
+
+        // Load attendance table for a specific date
+        function loadAttendanceTable(date) {
+            const tableBody = document.getElementById('attendanceBody');
+            tableBody.innerHTML = '';
+            
+            showStatusMessage('Loading employees...', true);
+            
+            fetch(`${apiBase}/get-employees`)
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to fetch employees');
+                return response.json();
+            })
+            .then(employees => {
+                return fetch(`${apiBase}/get-attendance`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ date })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return [];
+                    }
+                    return response.json();
+                })
+                .then(attendance => ({ employees, attendance }));
+            })
+            .then(data => {
+                const { employees, attendance } = data;
+                if (!employees || employees.length === 0) {
+                    showStatusMessage('No employees found. Please add employees first.', false);
+                    return;
+                }
+
+                employees.forEach(employee => {
+                    const existingRecord = attendance.find(record => {
+                        const recordDate = normalizeAttendanceDate(record.date);
+                        const matchesById = record.employee_id && Number(record.employee_id) === Number(employee.id);
+                        const matchesByName = record.employee_name && record.employee_name === employee.name;
+                        return (matchesById || matchesByName) && recordDate === date;
+                    });
+
+                    const row = document.createElement('tr');
+
+                    const idCell = document.createElement('td');
+                    idCell.textContent = employee.id;
+                    row.appendChild(idCell);
+
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = employee.name;
+                    row.appendChild(nameCell);
+
+                    const dateCell = document.createElement('td');
+                    dateCell.textContent = date;
+                    row.appendChild(dateCell);
+
+                    const attendanceCell = document.createElement('td');
+                    const select = document.createElement('select');
+                    select.name = `attendance-${employee.id}`;
+                    select.className = 'attendance-select';
+
+                    ['Select', 'Present', 'Absent'].forEach(optionValue => {
+                        const option = document.createElement('option');
+                        option.value = optionValue;
+                        option.textContent = optionValue;
+                        select.appendChild(option);
+                    });
+
+                    if (existingRecord) {
+                        select.value = existingRecord.status || 'Select';
+                    } else {
+                        select.value = 'Select';
+                    }
+
+                    select.addEventListener('change', () => {
+                        saveAttendanceRecord({
+                            id: employee.id,
+                            date,
+                            status: select.value
+                        });
+                    });
+
+                    attendanceCell.appendChild(select);
+                    row.appendChild(attendanceCell);
+                    tableBody.appendChild(row);
+                });
+
+                if (employees.length > 0) {
+                    showStatusMessage(`Loaded attendance for ${date}`, true);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showStatusMessage('Failed to load data. Please try again.', false);
+            });
+        }
+
+        function saveAttendanceRecord(record) {
+            if (!record || !record.id || !record.date) return;
+
+            fetch(`${apiBase}/save-attendance`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ attendance: [record] })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text || 'Failed to save attendance');
+                    });
+                }
+                return response.json();
+            })
+            .then(() => {
+                showStatusMessage('Attendance updated successfully', true);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showStatusMessage('Error saving attendance: ' + error.message, false);
+            });
+        }
+        
+        // Load monthly attendance
+        function goBack() {
+            window.location.href = 'dashboard.html';
+        }
+
+        function loadMonthlyAttendance(monthStr) {
+            showStatusMessage('Loading monthly attendance...', true);
+            
+            const [year, month] = monthStr.split('-');
+            const daysInMonth = new Date(year, month, 0).getDate();
+            
+            // Fetch employees
+            fetch(`${apiBase}/get-employees`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to fetch employees');
+                return response.json();
+            })
+            .then(employees => {
+                if (employees.length === 0) {
+                    showStatusMessage('No employees found. Please add employees first.', false);
+                    return;
+                }
+                
+                // Fetch monthly attendance
+                return fetch(`${apiBase}/get-monthly-attendance`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ month: monthStr })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return { employees: employees, attendance: [] };
+                    }
+                    return response.json().then(attendance => {
+                        return { employees: employees, attendance: attendance };
+                    });
+                });
+            })
+            .then(data => {
+                const { employees, attendance } = data;
+                const monthlyTable = document.getElementById('monthlyAttendanceTable');
+                monthlyTable.innerHTML = '';
+                
+                // Create header row with dates
+                const headerRow = document.createElement('tr');
+                
+                // Name header
+                const nameHeader = document.createElement('th');
+                nameHeader.textContent = 'Employee Name';
+                headerRow.appendChild(nameHeader);
+                
+                // Date headers
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateHeader = document.createElement('th');
+                    dateHeader.textContent = day;
+                    headerRow.appendChild(dateHeader);
+                }
+                
+                // Total Present/Absent headers
+                const presentHeader = document.createElement('th');
+                presentHeader.textContent = 'Total Present';
+                presentHeader.className = 'total-column';
+                headerRow.appendChild(presentHeader);
+                
+                const absentHeader = document.createElement('th');
+                absentHeader.textContent = 'Total Absent';
+                absentHeader.className = 'total-column';
+                headerRow.appendChild(absentHeader);
+                
+                monthlyTable.appendChild(headerRow);
+                
+                // Create rows for each employee
+                employees.forEach(employee => {
+                    const row = document.createElement('tr');
+                    
+                    // Name cell
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = employee.name;
+                    row.appendChild(nameCell);
+                    
+                    let presentCount = 0;
+                    let absentCount = 0;
+                    
+                    // Attendance cells for each day
+                    for (let day = 1; day <= daysInMonth; day++) {
+                        const dateStr = `${year}-${month}-${String(day).padStart(2, '0')}`;
+                        const cell = document.createElement('td');
+                        
+                        // Find attendance record for this employee and date
+                        const record = attendance.find(r => {
+                            const recordDate = normalizeAttendanceDate(r.date);
+                            const matchesById = r.employee_id && Number(r.employee_id) === Number(employee.id);
+                            const matchesByName = r.employee_name && r.employee_name === employee.name;
+                            return (matchesById || matchesByName) && recordDate === dateStr;
+                        });
+                        
+                        if (record) {
+                            if (record.status === 'Present') {
+                                cell.textContent = 'P';
+                                cell.className = 'present';
+                                presentCount++;
+                            } else if (record.status === 'Absent') {
+                                cell.textContent = 'A';
+                                cell.className = 'absent';
+                                absentCount++;
+                            } else {
+                                cell.textContent = '-';
+                            }
+                        } else {
+                            cell.textContent = '-';
+                        }
+                        
+                        row.appendChild(cell);
+                    }
+                    
+                    // Total Present cell
+                    const presentCell = document.createElement('td');
+                    presentCell.textContent = presentCount;
+                    presentCell.className = 'total-column';
+                    row.appendChild(presentCell);
+                    
+                    // Total Absent cell
+                    const absentCell = document.createElement('td');
+                    absentCell.textContent = absentCount;
+                    absentCell.className = 'total-column';
+                    row.appendChild(absentCell);
+                    
+                    monthlyTable.appendChild(row);
+                });
+                
+                showStatusMessage(`Loaded attendance for ${monthStr}`, true);
+                setTimeout(() => {
+                    document.getElementById('statusMessage').style.display = 'none';
+                }, 2000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showStatusMessage('Failed to load monthly data: ' + error.message, false);
+            });
+        }
+        
+        // Save attendance records for all rows
+        function saveAttendance() {
+            const selectedDate = document.getElementById('date').value;
+            const updatedAttendance = [];
+            const rows = document.getElementById('attendanceBody').getElementsByTagName('tr');
+
+            if (rows.length === 0) {
+                showStatusMessage('No employee data to save', false);
+                return;
+            }
+
+            for (let i = 0; i < rows.length; i++) {
+                const employeeId = rows[i].cells[0].textContent;
+                const select = rows[i].querySelector('select');
+                if (!select) continue;
+
+                updatedAttendance.push({
+                    id: employeeId,
+                    date: selectedDate,
+                    status: select.value
+                });
+            }
+
+            showStatusMessage('Saving attendance...', true);
+
+            fetch(`${apiBase}/save-attendance`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ attendance: updatedAttendance })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text || 'Server error');
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                showStatusMessage('Attendance saved successfully!', true);
+                console.log('Success:', data);
+            })
+            .catch(error => {
+                showStatusMessage('Error saving attendance: ' + error.message, false);
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
